@@ -1,103 +1,277 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import Stepper, { Step } from "@/components/StepperUi";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import emailjs from "emailjs-com";
+import Sucsses from "@/components/Sucsses";
+
+const moneyMethods = [
+  { id: "wistreen", label: "ويسترن يونيون", icon: "/icons/wistreen.png" },
+  { id: "orange", label: "أورانج موني", icon: "/icons/orange.png" },
+  { id: "vodafone", label: "فودافون كاش", icon: "/icons/vodafone.png" },
+  {
+    id: "visa",
+    label: "الدفع بواسطة فيزا او ماستر كارت",
+    icon: "/icons/visa.webp",
+  },
+  { id: "cib", label: "البنك التجاري الدولي", icon: "/icons/cib.png" },
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [emailSent, setEmailSent] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const planPrices = {
+    first: 1000,
+    second: 2000,
+    third: 3000,
+    fourth: 4000,
+  };
+  const [price, setPrice] = useState(0);
+
+  const isValidStep1 = name.trim() !== "" && /^201\d{9}$/.test(phone);
+  const isValidStep2 = /^@.+$/.test(email);
+  const isValidStep3 = !!selectedPlan;
+  const isValidStep4 = !!selectedMethod;
+
+  useEffect(() => {
+    if (selectedPlan) setPrice(planPrices[selectedPlan]);
+  }, [selectedPlan]);
+
+  function isStepValid(step) {
+    switch (step) {
+      case 1:
+        return isValidStep1;
+      case 2:
+        return isValidStep2;
+      case 3:
+        return isValidStep3;
+      case 4:
+        return isValidStep4;
+      default:
+        return true;
+    }
+  }
+
+  const sendEmail = async () => {
+    try {
+      const result = await emailjs.send(
+        "service_hktbakp",
+        "template_1aznsr4",
+        {
+          name,
+          phone,
+        },
+        "1uWgr3JfYLcUC77HT"
+      );
+      console.log("Email sent:", result.text);
+      setEmailSent(true);
+    } catch (error) {
+      console.error("Email send error:", error);
+    }
+  };
+
+  const sendFinalEmail = async () => {
+    try {
+      const result = await emailjs.send(
+        "service_hktbakp",
+        "template_ilaak5a",
+        {
+          name,
+          phone,
+          domain: email,
+          plan: selectedPlan,
+          method: selectedMethod,
+          price: `${price} جنيه`,
+        },
+        "1uWgr3JfYLcUC77HT"
+      );
+      console.log("✅ Final email sent:", result.text);
+    } catch (error) {
+      console.error("❌ Final email error:", error);
+    }
+  };
+
+  return (
+    <div className="">
+      <div className="flex flex-col items-center justify-center p-4 mt-10">
+        <h2 className="text-2xl font-bold">بخطوات بسيطة وسهله</h2>
+
+        <p className="text-sm"> إحصل على موقعك الان ! </p>
+
+        <p className="text-sm w-[400px] text-center mt-4">
+          يمكنك الان الحصول على موقعك الخاص بتصميم يناسب نشاط موية علامتك
+          التجارية مع دعم فني متواصل على مدار الساعة وتصميم مخصص ليتناسب مع
+          علامتك التجارية فقط بسعر خاص
+        </p>
+      </div>
+      {showThankYou ? (
+        <Sucsses />
+      ) : (
+        <Stepper
+          initialStep={1}
+          onStepChange={(step) => {
+            if (step === 2 && isValidStep1 && !emailSent) {
+              sendEmail();
+            }
+            setCurrentStep(step);
+          }}
+          onFinalStepCompleted={() => {
+            sendFinalEmail();
+            setShowThankYou(true);
+            console.log("All steps completed!");
+          }}
+          backButtonText="السابق"
+          nextButtonText="التالي"
+          nextButtonProps={{
+            disabled: !isStepValid(currentStep),
+            style: !isStepValid(currentStep)
+              ? { opacity: 0.5, cursor: "not-allowed" }
+              : {},
+          }}
+          disableStepIndicators={true}
+        >
+          <Step>
+            <h2 className="text-2xl font-bold mb-4">بينات طالب الخدمة</h2>
+            <Label htmlFor="name" className="mb-2">
+              الاسم:
+            </Label>
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="ادخل الاسم"
+              className="mb-4"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <Label htmlFor="phone" className="mb-2">
+              الرقم: *
+            </Label>
+            <Input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              placeholder="201000000000"
+              className="mb-2"
+            />
+            {!isValidStep1 && (
+              <p className="text-yellow-500 text-sm">
+                يرجى إدخال اسم ورقم صحيح يبدأ بـ 201 ويتكون من 12 رقم
+              </p>
+            )}
+          </Step>
+          <Step>
+            <h2 className="text-2xl font-bold mb-4">
+              ادخل اسم نطاق بريدك الالكترونى المناسب
+            </h2>
+            <Label htmlFor="email" className="mb-2">
+              اسم الدومين
+            </Label>
+            <Input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="@CompanyName"
+              className="mb-10"
+            />
+            {!isValidStep2 && (
+              <p className="text-yellow-500 text-sm">
+                يجب أن يبدأ اسم الدومين بـ @
+              </p>
+            )}
+          </Step>
+          <Step>
+            <h2>اختار الباقة المناسبة لك:</h2>
+            <Select value={selectedPlan} onValueChange={setSelectedPlan}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="اختر باقة" />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                <SelectItem value="first"> استضافه موقع</SelectItem>
+                <SelectItem value="second"> تصميم موقع</SelectItem>
+                <SelectItem value="third"> برمجه موقع</SelectItem>
+                <SelectItem value="fourth">
+                  تصميم واستضافه وبرمجه موقع
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            {!isValidStep3 && (
+              <p className="text-yellow-500 text-sm">يجب اختيار باقة</p>
+            )}
+            <h3 className="text-lg font-bold mt-10">جميع الباقات تشمل على:</h3>
+            <ul className="list-disc list-inside">
+              <li>لوحة تحكم سهلة</li>
+              <li>اسم نطاق - دومين</li>
+              <li>سيرفرات سحابية</li>
+              <li>سرعات فائقة للإرسال أو الاستقبال</li>
+              <li>نسخ احتياطي</li>
+              <li>دعم فني</li>
+            </ul>
+            {selectedPlan === "" ? (
+              ""
+            ) : (
+              <h2 className="text-lg font-bold mt-10">
+                سعر الباقة: {price} جنيه
+              </h2>
+            )}
+          </Step>
+          <Step>
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              اختر طريقة الدفع المناسبة
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+              {moneyMethods.map((method) => (
+                <button
+                  key={method.id}
+                  onClick={() => setSelectedMethod(method.id)}
+                  className={`border rounded-xl p-4 flex flex-col items-center shadow-sm transition-all ${
+                    selectedMethod === method.id
+                      ? "border-blue-600 ring-2 ring-blue-300"
+                      : "border-gray-200"
+                  }`}
+                >
+                  <img
+                    src={method.icon}
+                    alt={method.label}
+                    className="h-12 mb-3"
+                  />
+                  <p className="text-center text-sm font-medium">
+                    {method.label}
+                  </p>
+                </button>
+              ))}
+            </div>
+            {!isValidStep4 && (
+              <p className="text-yellow-500 text-sm text-center mt-4">
+                يجب اختيار طريقة دفع
+              </p>
+            )}
+          </Step>
+          <Step>
+            <h2 className="text-2xl font-bold mb-4 text-center">تأكيد الدفع</h2>
+            <p className="text-center">الاسم: {name}</p>
+            <p className="text-center">رقم الهاتف: {phone}</p>
+            <p className="text-center">الدومين: {email}</p>
+            <p className="text-center">الباقة: {selectedPlan}</p>
+            <p className="text-center">طريقة الدفع: {selectedMethod}</p>
+            <p className="text-center font-bold mt-4">المجموع: {price} جنيه</p>
+          </Step>
+        </Stepper>
+      )}
     </div>
   );
 }
