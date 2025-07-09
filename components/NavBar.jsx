@@ -16,7 +16,7 @@ function NavBar() {
 
       <div className="text-white flex justify-between items-center gap-2 mt-4 md:mt-0">
         <ul className="flex items-center gap-4">
-          <li>الدعم والاستفسارات:</li>
+          <li className="md:block hidden">الدعم والاستفسارات:</li>
           <li>
             <Link href="tel:01553841793" className="flex items-center gap-1">
               <Phone className="w-4 h-4" /> 01553841793

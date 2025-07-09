@@ -44,7 +44,7 @@ export default function Home() {
   };
   const [price, setPrice] = useState(0);
 
-  const isValidStep1 = name.trim() !== "" && /^201\d{9}$/.test(phone);
+  const isValidStep1 = name.trim() !== "" && /^01\d{9}$/.test(phone);
   const isValidStep2 = /^@.+$/.test(email);
   const isValidStep3 = !!selectedPlan;
   const isValidStep4 = !!selectedMethod;
@@ -108,7 +108,7 @@ export default function Home() {
   };
 
   return (
-    <div className="">
+    <div>
       <div className="flex flex-col items-center justify-center p-4 mt-10">
         <h2 className="text-2xl font-bold">بخطوات بسيطة وسهله</h2>
 
@@ -148,29 +148,29 @@ export default function Home() {
         >
           <Step>
             <h2 className="text-2xl font-bold mb-4">بينات طالب الخدمة</h2>
-            <Label htmlFor="name" className="mb-2">
-              الاسم:
+            <Label htmlFor="name" className="mb-2 font-semibold text-lg">
+              الاسم :
             </Label>
             <Input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="ادخل الاسم"
-              className="mb-4"
+              className="mb-4 "
             />
-            <Label htmlFor="phone" className="mb-2">
-              الرقم: *
+            <Label htmlFor="phone" className="mb-2 font-semibold text-lg">
+              الرقم : *
             </Label>
             <Input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
-              placeholder="201000000000"
+              placeholder="01000000000"
               className="mb-2"
             />
             {!isValidStep1 && (
               <p className="text-yellow-500 text-sm">
-                يرجى إدخال اسم ورقم صحيح يبدأ بـ 201 ويتكون من 12 رقم
+                يرجى إدخال اسم ورقم صحيح يبدأ بـ 01 ويتكون من 11 رقم
               </p>
             )}
           </Step>
