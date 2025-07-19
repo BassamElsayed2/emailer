@@ -37,15 +37,15 @@ export default function Home() {
   const [showThankYou, setShowThankYou] = useState(false);
 
   const planPrices = {
-    first: 1000,
-    second: 2000,
+    first: 2000,
+    second: 2500,
     third: 3000,
-    fourth: 4000,
+    fourth: 5000,
   };
   const [price, setPrice] = useState(0);
 
   const isValidStep1 = name.trim() !== "" && /^01\d{9}$/.test(phone);
-  const isValidStep2 = /^@.+$/.test(email);
+  const isValidStep2 = true;
   const isValidStep3 = !!selectedPlan;
   const isValidStep4 = !!selectedMethod;
 
@@ -108,169 +108,206 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <div className="flex flex-col items-center justify-center p-4 mt-10">
-        <h2 className="text-2xl font-bold">بخطوات بسيطة وسهله</h2>
-
-        <p className="text-sm"> إحصل على موقعك الان ! </p>
-
-        <p className="text-sm w-[400px] text-center mt-4">
-          يمكنك الان الحصول على موقعك الخاص بتصميم يناسب نشاط موية علامتك
-          التجارية مع دعم فني متواصل على مدار الساعة وتصميم مخصص ليتناسب مع
-          علامتك التجارية فقط بسعر خاص
-        </p>
-      </div>
+    <div className="min-h-[100vh]">
       {showThankYou ? (
         <Sucsses />
       ) : (
-        <Stepper
-          initialStep={1}
-          onStepChange={(step) => {
-            if (step === 2 && isValidStep1 && !emailSent) {
-              sendEmail();
-            }
-            setCurrentStep(step);
-          }}
-          onFinalStepCompleted={() => {
-            sendFinalEmail();
-            setShowThankYou(true);
-            console.log("All steps completed!");
-          }}
-          backButtonText="السابق"
-          nextButtonText="التالي"
-          nextButtonProps={{
-            disabled: !isStepValid(currentStep),
-            style: !isStepValid(currentStep)
-              ? { opacity: 0.5, cursor: "not-allowed" }
-              : {},
-          }}
-          disableStepIndicators={true}
-        >
-          <Step>
-            <h2 className="text-2xl font-bold mb-4">بينات طالب الخدمة</h2>
-            <Label htmlFor="name" className="mb-2 font-semibold text-lg">
-              الاسم :
-            </Label>
-            <Input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="ادخل الاسم"
-              className="mb-4 "
-            />
-            <Label htmlFor="phone" className="mb-2 font-semibold text-lg">
-              الرقم : *
-            </Label>
-            <Input
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-              placeholder="01000000000"
-              className="mb-2"
-            />
-            {!isValidStep1 && (
-              <p className="text-yellow-500 text-sm">
-                يرجى إدخال اسم ورقم صحيح يبدأ بـ 01 ويتكون من 11 رقم
-              </p>
-            )}
-          </Step>
-          <Step>
-            <h2 className="text-2xl font-bold mb-4">
-              ادخل اسم نطاق بريدك الالكترونى المناسب
-            </h2>
-            <Label htmlFor="email" className="mb-2">
-              اسم الدومين
-            </Label>
-            <Input
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="@CompanyName"
-              className="mb-10"
-            />
-            {!isValidStep2 && (
-              <p className="text-yellow-500 text-sm">
-                يجب أن يبدأ اسم الدومين بـ @
-              </p>
-            )}
-          </Step>
-          <Step>
-            <h2>اختار الباقة المناسبة لك:</h2>
-            <Select value={selectedPlan} onValueChange={setSelectedPlan}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="اختر باقة" />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                <SelectItem value="first"> استضافه موقع</SelectItem>
-                <SelectItem value="second"> تصميم موقع</SelectItem>
-                <SelectItem value="third"> برمجه موقع</SelectItem>
-                <SelectItem value="fourth">
-                  تصميم واستضافه وبرمجه موقع
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            {!isValidStep3 && (
-              <p className="text-yellow-500 text-sm">يجب اختيار باقة</p>
-            )}
-            <h3 className="text-lg font-bold mt-10">جميع الباقات تشمل على:</h3>
-            <ul className="list-disc list-inside">
-              <li>لوحة تحكم سهلة</li>
-              <li>اسم نطاق - دومين</li>
-              <li>سيرفرات سحابية</li>
-              <li>سرعات فائقة للإرسال أو الاستقبال</li>
-              <li>نسخ احتياطي</li>
-              <li>دعم فني</li>
-            </ul>
-            {selectedPlan === "" ? (
-              ""
-            ) : (
-              <h2 className="text-lg font-bold mt-10">
-                سعر الباقة: {price} جنيه
+        <>
+          <div className="flex flex-col items-center justify-center p-4 mt-10">
+            <h2 className="text-2xl font-bold">بخطوات بسيطة وسهله</h2>
+
+            <p className="text-sm"> إحصل على موقعك الان ! </p>
+
+            <p className="text-sm w-[400px] text-center mt-4">
+              يرجي تعبئة البيانات التاليه لطلب الخدمه
+            </p>
+          </div>
+          <Stepper
+            initialStep={1}
+            onStepChange={(step) => {
+              if (step === 2 && isValidStep1 && !emailSent) {
+                sendEmail();
+              }
+              setCurrentStep(step);
+            }}
+            onFinalStepCompleted={() => {
+              sendFinalEmail();
+              setShowThankYou(true);
+              console.log("All steps completed!");
+            }}
+            backButtonText="السابق"
+            nextButtonText="التالي"
+            nextButtonProps={{
+              disabled: !isStepValid(currentStep),
+              style: !isStepValid(currentStep)
+                ? { opacity: 0.5, cursor: "not-allowed" }
+                : {},
+            }}
+            disableStepIndicators={true}
+          >
+            <Step>
+              <h2 className="text-2xl font-bold mb-4">بينات طالب الخدمة</h2>
+              <Label htmlFor="name" className="mb-2 font-semibold text-lg">
+                الاسم :
+              </Label>
+              <Input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="ادخل الاسم"
+                className="mb-4 "
+              />
+              <Label htmlFor="phone" className="mb-2 font-semibold text-lg">
+                الرقم : *
+              </Label>
+              <Input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+                placeholder="01000000000"
+                className="mb-2"
+              />
+              {!isValidStep1 && (
+                <p className="text-yellow-500 text-sm">
+                  يرجى إدخال اسم ورقم صحيح يبدأ بـ 01 ويتكون من 11 رقم
+                </p>
+              )}
+            </Step>
+            <Step>
+              <h2 className="text-2xl font-bold mb-4">
+                ادخل اسم الموقع الذى ترغب فى حجزه
               </h2>
-            )}
-          </Step>
-          <Step>
-            <h2 className="text-2xl font-bold mb-4 text-center">
-              اختر طريقة الدفع المناسبة
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-              {moneyMethods.map((method) => (
-                <button
-                  key={method.id}
-                  onClick={() => setSelectedMethod(method.id)}
-                  className={`border rounded-xl p-4 flex flex-col items-center shadow-sm transition-all ${
-                    selectedMethod === method.id
-                      ? "border-blue-600 ring-2 ring-blue-300"
-                      : "border-gray-200"
-                  }`}
-                >
-                  <img
-                    src={method.icon}
-                    alt={method.label}
-                    className="h-12 mb-3"
-                  />
-                  <p className="text-center text-sm font-medium">
-                    {method.label}
-                  </p>
-                </button>
-              ))}
-            </div>
-            {!isValidStep4 && (
-              <p className="text-yellow-500 text-sm text-center mt-4">
-                يجب اختيار طريقة دفع
+              <Label htmlFor="email" className="mb-2 text-lg">
+                اسم الموقع
+              </Label>
+              <Input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="www.companyName.com/net"
+                className="mb-10"
+              />
+
+              <h2 className="text-xl">اختار الباقة المناسبة لك:</h2>
+              <Select value={selectedPlan} onValueChange={setSelectedPlan}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="اختر باقة" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="first"> استضافه موقع</SelectItem>
+                  <SelectItem value="second"> تصميم موقع</SelectItem>
+                  <SelectItem value="third"> برمجه موقع</SelectItem>
+                  <SelectItem value="fourth">
+                    تصميم واستضافه وبرمجه موقع
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {!isValidStep3 && (
+                <p className="text-yellow-500 text-sm">يجب اختيار باقة</p>
+              )}
+              <h3 className="text-xl font-bold mt-10">
+                جميع الباقات تشمل على:
+              </h3>
+              <ul className="list-disc list-inside text-lg">
+                <li>لوحة تحكم سهلة</li>
+                <li>اسم نطاق - دومين</li>
+                <li>سيرفرات سحابية</li>
+                <li>سرعات فائقة للإرسال أو الاستقبال</li>
+                <li>نسخ احتياطي</li>
+                <li>دعم فني</li>
+              </ul>
+              {selectedPlan === "" ? (
+                ""
+              ) : (
+                <h2 className="text-lg font-bold mt-10">
+                  سعر الباقة: {price} جنيه
+                </h2>
+              )}
+            </Step>
+            {/* <Step>
+              <h2>اختار الباقة المناسبة لك:</h2>
+              <Select value={selectedPlan} onValueChange={setSelectedPlan}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="اختر باقة" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="first"> استضافه موقع</SelectItem>
+                  <SelectItem value="second"> تصميم موقع</SelectItem>
+                  <SelectItem value="third"> برمجه موقع</SelectItem>
+                  <SelectItem value="fourth">
+                    تصميم واستضافه وبرمجه موقع
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {!isValidStep3 && (
+                <p className="text-yellow-500 text-sm">يجب اختيار باقة</p>
+              )}
+              <h3 className="text-lg font-bold mt-10">
+                جميع الباقات تشمل على:
+              </h3>
+              <ul className="list-disc list-inside">
+                <li>لوحة تحكم سهلة</li>
+                <li>اسم نطاق - دومين</li>
+                <li>سيرفرات سحابية</li>
+                <li>سرعات فائقة للإرسال أو الاستقبال</li>
+                <li>نسخ احتياطي</li>
+                <li>دعم فني</li>
+              </ul>
+              {selectedPlan === "" ? (
+                ""
+              ) : (
+                <h2 className="text-lg font-bold mt-10">
+                  سعر الباقة: {price} جنيه
+                </h2>
+              )}
+            </Step>
+            <Step>
+              <h2 className="text-2xl font-bold mb-4 text-center">
+                اختر طريقة الدفع المناسبة
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                {moneyMethods.map((method) => (
+                  <button
+                    key={method.id}
+                    onClick={() => setSelectedMethod(method.id)}
+                    className={`border rounded-xl p-4 flex flex-col items-center shadow-sm transition-all ${
+                      selectedMethod === method.id
+                        ? "border-blue-600 ring-2 ring-blue-300"
+                        : "border-gray-200"
+                    }`}
+                  >
+                    <img
+                      src={method.icon}
+                      alt={method.label}
+                      className="h-12 mb-3"
+                    />
+                    <p className="text-center text-sm font-medium">
+                      {method.label}
+                    </p>
+                  </button>
+                ))}
+              </div>
+              {!isValidStep4 && (
+                <p className="text-yellow-500 text-sm text-center mt-4">
+                  يجب اختيار طريقة دفع
+                </p>
+              )}
+            </Step>
+            <Step>
+              <h2 className="text-2xl font-bold mb-4 text-center">
+                تأكيد الدفع
+              </h2>
+              <p className="text-center">الاسم: {name}</p>
+              <p className="text-center">رقم الهاتف: {phone}</p>
+              <p className="text-center">الدومين: {email}</p>
+              <p className="text-center">الباقة: {selectedPlan}</p>
+              <p className="text-center">طريقة الدفع: {selectedMethod}</p>
+              <p className="text-center font-bold mt-4">
+                المجموع: {price} جنيه
               </p>
-            )}
-          </Step>
-          <Step>
-            <h2 className="text-2xl font-bold mb-4 text-center">تأكيد الدفع</h2>
-            <p className="text-center">الاسم: {name}</p>
-            <p className="text-center">رقم الهاتف: {phone}</p>
-            <p className="text-center">الدومين: {email}</p>
-            <p className="text-center">الباقة: {selectedPlan}</p>
-            <p className="text-center">طريقة الدفع: {selectedMethod}</p>
-            <p className="text-center font-bold mt-4">المجموع: {price} جنيه</p>
-          </Step>
-        </Stepper>
+            </Step> */}
+          </Stepper>
+        </>
       )}
     </div>
   );
