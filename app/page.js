@@ -36,22 +36,10 @@ export default function Home() {
   const [emailSent, setEmailSent] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
 
-  const planPrices = {
-    first: 2000,
-    second: 2500,
-    third: 3000,
-    fourth: 5000,
-  };
-  const [price, setPrice] = useState(0);
-
   const isValidStep1 = name.trim() !== "" && /^01\d{9}$/.test(phone);
   const isValidStep2 = true;
   const isValidStep3 = !!selectedPlan;
   const isValidStep4 = !!selectedMethod;
-
-  useEffect(() => {
-    if (selectedPlan) setPrice(planPrices[selectedPlan]);
-  }, [selectedPlan]);
 
   function isStepValid(step) {
     switch (step) {
@@ -216,96 +204,7 @@ export default function Home() {
                 <li>نسخ احتياطي</li>
                 <li>دعم فني</li>
               </ul>
-              {selectedPlan === "" ? (
-                ""
-              ) : (
-                <h2 className="text-lg font-bold mt-10">
-                  سعر الباقة: {price} جنيه
-                </h2>
-              )}
             </Step>
-            {/* <Step>
-              <h2>اختار الباقة المناسبة لك:</h2>
-              <Select value={selectedPlan} onValueChange={setSelectedPlan}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="اختر باقة" />
-                </SelectTrigger>
-                <SelectContent className="bg-white">
-                  <SelectItem value="first"> استضافه موقع</SelectItem>
-                  <SelectItem value="second"> تصميم موقع</SelectItem>
-                  <SelectItem value="third"> برمجه موقع</SelectItem>
-                  <SelectItem value="fourth">
-                    تصميم واستضافه وبرمجه موقع
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              {!isValidStep3 && (
-                <p className="text-yellow-500 text-sm">يجب اختيار باقة</p>
-              )}
-              <h3 className="text-lg font-bold mt-10">
-                جميع الباقات تشمل على:
-              </h3>
-              <ul className="list-disc list-inside">
-                <li>لوحة تحكم سهلة</li>
-                <li>اسم نطاق - دومين</li>
-                <li>سيرفرات سحابية</li>
-                <li>سرعات فائقة للإرسال أو الاستقبال</li>
-                <li>نسخ احتياطي</li>
-                <li>دعم فني</li>
-              </ul>
-              {selectedPlan === "" ? (
-                ""
-              ) : (
-                <h2 className="text-lg font-bold mt-10">
-                  سعر الباقة: {price} جنيه
-                </h2>
-              )}
-            </Step>
-            <Step>
-              <h2 className="text-2xl font-bold mb-4 text-center">
-                اختر طريقة الدفع المناسبة
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-                {moneyMethods.map((method) => (
-                  <button
-                    key={method.id}
-                    onClick={() => setSelectedMethod(method.id)}
-                    className={`border rounded-xl p-4 flex flex-col items-center shadow-sm transition-all ${
-                      selectedMethod === method.id
-                        ? "border-blue-600 ring-2 ring-blue-300"
-                        : "border-gray-200"
-                    }`}
-                  >
-                    <img
-                      src={method.icon}
-                      alt={method.label}
-                      className="h-12 mb-3"
-                    />
-                    <p className="text-center text-sm font-medium">
-                      {method.label}
-                    </p>
-                  </button>
-                ))}
-              </div>
-              {!isValidStep4 && (
-                <p className="text-yellow-500 text-sm text-center mt-4">
-                  يجب اختيار طريقة دفع
-                </p>
-              )}
-            </Step>
-            <Step>
-              <h2 className="text-2xl font-bold mb-4 text-center">
-                تأكيد الدفع
-              </h2>
-              <p className="text-center">الاسم: {name}</p>
-              <p className="text-center">رقم الهاتف: {phone}</p>
-              <p className="text-center">الدومين: {email}</p>
-              <p className="text-center">الباقة: {selectedPlan}</p>
-              <p className="text-center">طريقة الدفع: {selectedMethod}</p>
-              <p className="text-center font-bold mt-4">
-                المجموع: {price} جنيه
-              </p>
-            </Step> */}
           </Stepper>
         </>
       )}

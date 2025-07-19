@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
         <Footer />
         <div className="fixed bottom-5 left-10 group">
           <a
-            href="https://wa.me/01553841793"
+            href="https://wa.me/201553841793"
             target="_blank"
             rel="noopener noreferrer"
             className="relative flex items-center justify-center"
