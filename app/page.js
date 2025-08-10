@@ -11,35 +11,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import emailjs from "emailjs-com";
 import Sucsses from "@/components/Sucsses";
-
-const moneyMethods = [
-  { id: "wistreen", label: "ويسترن يونيون", icon: "/icons/wistreen.png" },
-  { id: "orange", label: "أورانج موني", icon: "/icons/orange.png" },
-  { id: "vodafone", label: "فودافون كاش", icon: "/icons/vodafone.png" },
-  {
-    id: "visa",
-    label: "الدفع بواسطة فيزا او ماستر كارت",
-    icon: "/icons/visa.webp",
-  },
-  { id: "cib", label: "البنك التجاري الدولي", icon: "/icons/cib.png" },
-];
 
 export default function Home() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [selectedMethod, setSelectedMethod] = useState(null);
+
   const [currentStep, setCurrentStep] = useState(1);
-  const [emailSent, setEmailSent] = useState(false);
+
   const [showThankYou, setShowThankYou] = useState(false);
+
+  // رقم الواتساب الذي سيتم إرسال البيانات إليه
+  const whatsappNumber = "201553841793"; // قم بتغيير هذا الرقم برقمك
 
   const isValidStep1 = name.trim() !== "" && /^01\d{9}$/.test(phone);
   const isValidStep2 = true;
   const isValidStep3 = !!selectedPlan;
-  const isValidStep4 = !!selectedMethod;
 
   function isStepValid(step) {
     switch (step) {
@@ -49,50 +38,47 @@ export default function Home() {
         return isValidStep2;
       case 3:
         return isValidStep3;
-      case 4:
-        return isValidStep4;
+
       default:
         return true;
     }
   }
 
-  const sendEmail = async () => {
+  const sendWhatsAppMessage = async (message) => {
     try {
-      const result = await emailjs.send(
-        "service_hktbakp",
-        "template_1aznsr4",
-        {
-          name,
-          phone,
-        },
-        "1uWgr3JfYLcUC77HT"
-      );
-      console.log("Email sent:", result.text);
-      setEmailSent(true);
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+      // فتح الواتساب في نافذة جديدة
+      window.open(whatsappUrl, "_blank");
+
+      return true;
     } catch (error) {
-      console.error("Email send error:", error);
+      console.error("WhatsApp send error:", error);
+      return false;
     }
   };
 
-  const sendFinalEmail = async () => {
-    try {
-      const result = await emailjs.send(
-        "service_hktbakp",
-        "template_ilaak5a",
-        {
-          name,
-          phone,
-          domain: email,
-          plan: selectedPlan,
-          method: selectedMethod,
-          price: `${price} جنيه`,
-        },
-        "1uWgr3JfYLcUC77HT"
-      );
-      console.log("✅ Final email sent:", result.text);
-    } catch (error) {
-      console.error("❌ Final email error:", error);
-    }
+  const sendFinalWhatsApp = async () => {
+    const planNames = {
+      first: "استضافه موقع",
+      second: "تصميم موقع",
+      third: "برمجه موقع",
+      fourth: "تصميم واستضافه وبرمجه موقع",
+    };
+
+    const message = `🎉 طلب جديد مكتمل!
+
+📋 تفاصيل الطلب:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ الاسم: ${name}
+ رقم الهاتف: ${phone}
+ اسم الموقع: ${email}
+ الباقة المختارة: ${planNames[selectedPlan] || selectedPlan}
+
+━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+    await sendWhatsAppMessage(message);
   };
 
   return (
@@ -113,13 +99,10 @@ export default function Home() {
           <Stepper
             initialStep={1}
             onStepChange={(step) => {
-              if (step === 2 && isValidStep1 && !emailSent) {
-                sendEmail();
-              }
               setCurrentStep(step);
             }}
             onFinalStepCompleted={() => {
-              sendFinalEmail();
+              sendFinalWhatsApp();
               setShowThankYou(true);
               console.log("All steps completed!");
             }}
@@ -163,7 +146,7 @@ export default function Home() {
             </Step>
             <Step>
               <h2 className="text-2xl font-bold mb-4">
-                ادخل اسم الموقع الذى ترغب فى حجزه
+                ادخل اسم الموقع الذى ترغب فى حجزه
               </h2>
               <Label htmlFor="email" className="mb-2 text-lg">
                 اسم الموقع
@@ -186,7 +169,7 @@ export default function Home() {
                   <SelectItem value="second"> تصميم موقع</SelectItem>
                   <SelectItem value="third"> برمجه موقع</SelectItem>
                   <SelectItem value="fourth">
-                    تصميم واستضافه وبرمجه موقع
+                    تصميم واستضافه وبرمجه موقع
                   </SelectItem>
                 </SelectContent>
               </Select>

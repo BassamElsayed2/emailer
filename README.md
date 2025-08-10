@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Emilat - نظام طلب المواقع
 
-## Getting Started
+## الوصف
 
-First, run the development server:
+نظام بسيط لطلب المواقع الإلكترونية مع إرسال البيانات عبر WhatsApp.
+
+## المميزات
+
+- ✅ واجهة مستخدم بسيطة وسهلة الاستخدام
+- ✅ خطوات منظمة لطلب الخدمة
+- ✅ إرسال البيانات عبر WhatsApp
+
+- ✅ تصميم متجاوب
+
+## التثبيت والتشغيل
+
+### المتطلبات
+
+- Node.js (الإصدار 18 أو أحدث)
+- npm أو yarn
+
+### خطوات التثبيت
 
 ```bash
+# تثبيت المتطلبات
+npm install
+
+# تشغيل المشروع في وضع التطوير
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# بناء المشروع للإنتاج
+npm run build
+
+# تشغيل المشروع في وضع الإنتاج
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## الإعداد
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### تغيير رقم WhatsApp
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+قم بتعديل رقم WhatsApp في ملف `app/page.js`:
 
-## Learn More
+```javascript
+// رقم الواتساب الذي سيتم إرسال البيانات إليه
+const whatsappNumber = "201553841793"; // قم بتغيير هذا الرقم برقمك
+```
 
-To learn more about Next.js, take a look at the following resources:
+**ملاحظة مهمة**: تأكد من إضافة رمز البلد (مثل 20 لمصر) قبل رقم الهاتف.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## كيفية العمل
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### الخطوة الأولى: بيانات العميل
 
-## Deploy on Vercel
+- إدخال اسم العميل
+- إدخال رقم الهاتف (يجب أن يبدأ بـ 01 ويتكون من 11 رقم)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### الخطوة الثانية: تفاصيل الطلب
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- إدخال اسم الموقع المطلوب
+- اختيار الباقة المناسبة:
+  - استضافة موقع
+  - تصميم موقع
+  - برمجة موقع
+  - تصميم واستضافة وبرمجة موقع
+
+### إرسال البيانات
+
+- عند إكمال جميع الخطوات، سيتم إرسال رسالة واحدة تحتوي على جميع التفاصيل عبر WhatsApp
+
+## الباقات المتاحة
+
+جميع الباقات تشمل:
+
+- لوحة تحكم سهلة
+- اسم نطاق - دومين
+- سيرفرات سحابية
+- سرعات فائقة للإرسال أو الاستقبال
+- نسخ احتياطي
+- دعم فني
+
+## التقنيات المستخدمة
+
+- Next.js 15
+- React 19
+- Tailwind CSS
+- Radix UI
+- Framer Motion
+
+## الترخيص
+
+هذا المشروع مفتوح المصدر ومتاح للاستخدام التجاري.
