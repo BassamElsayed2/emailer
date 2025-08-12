@@ -61,10 +61,9 @@ export default function Home() {
 
   const sendFinalWhatsApp = async () => {
     const planNames = {
-      first: "استضافه موقع",
-      second: "تصميم موقع",
-      third: "برمجه موقع",
-      fourth: "تصميم واستضافه وبرمجه موقع",
+      first: "موقع إخباري",
+      second: "موقع عقارات",
+      third: "موقع كامل",
     };
 
     const message = `🎉 طلب جديد مكتمل!
@@ -74,7 +73,7 @@ export default function Home() {
  الاسم: ${name}
  رقم الهاتف: ${phone}
  اسم الموقع: ${email}
- الباقة المختارة: ${planNames[selectedPlan] || selectedPlan}
+ نوع الموقع المختار: ${planNames[selectedPlan] || selectedPlan}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━`;
 
@@ -159,22 +158,19 @@ export default function Home() {
                 className="mb-10"
               />
 
-              <h2 className="text-xl">اختار الباقة المناسبة لك:</h2>
+              <h2 className="text-xl">اختار نوع الموقع المناسب لك:</h2>
               <Select value={selectedPlan} onValueChange={setSelectedPlan}>
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="اختر باقة" />
+                  <SelectValue placeholder="اختر نوع الموقع" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="first"> استضافه موقع</SelectItem>
-                  <SelectItem value="second"> تصميم موقع</SelectItem>
-                  <SelectItem value="third"> برمجه موقع</SelectItem>
-                  <SelectItem value="fourth">
-                    تصميم واستضافه وبرمجه موقع
-                  </SelectItem>
+                  <SelectItem value="first">موقع إخباري</SelectItem>
+                  <SelectItem value="second">موقع عقارات</SelectItem>
+                  <SelectItem value="third">موقع كامل</SelectItem>
                 </SelectContent>
               </Select>
               {!isValidStep3 && (
-                <p className="text-yellow-500 text-sm">يجب اختيار باقة</p>
+                <p className="text-yellow-500 text-sm">يجب اختيار نوع الموقع</p>
               )}
               <h3 className="text-xl font-bold mt-10">
                 جميع الباقات تشمل على:
@@ -186,6 +182,8 @@ export default function Home() {
                 <li>سرعات فائقة للإرسال أو الاستقبال</li>
                 <li>نسخ احتياطي</li>
                 <li>دعم فني</li>
+                <li>تصميم متجاوب</li>
+                <li>تحسين محركات البحث</li>
               </ul>
             </Step>
           </Stepper>
